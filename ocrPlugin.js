@@ -49,8 +49,12 @@ OcrPlugin = {
 		return options
 	},
 
+	getResult: function() {
+		return this.res
+	},
 
 	recog: function(data){
+		var result;
 		$.ajax({
 			headers: this.options,
 			processData: false,
@@ -58,10 +62,12 @@ OcrPlugin = {
 			type: "POST",
 			url: "http://localhost:8800/",
 			data: "hello world",
+			async:false,
 			success: function(res){
-				console.log(res);
+				result = res;
 			}
 		})
+		return result
 	},
 
 }
