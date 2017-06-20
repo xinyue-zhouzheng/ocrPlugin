@@ -1,47 +1,80 @@
 if (typeof jQuery === 'undefined') {
-  throw new Error('ocrPlugin\'s JavaScript requires jQuery')
+  	throw new Error('ocrPlugin\'s JavaScript requires jQuery')
 }
 
 +function ($) {
-  'use strict';
-  var version = $.fn.jquery.split(' ')[0].split('.')
-  if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 3)) {
-    throw new Error('ocrPlugin\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 4')
-  }
+	'use strict';
+	var version = $.fn.jquery.split(' ')[0].split('.')
+	if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 3)) {
+		throw new Error('ocrPlugin\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 4')
+	}
 }(jQuery);
 
 
-+function ($) {
-  'use strict';
+
   
-	$.fn.ocrPlugin = function(options){
-		var defaultOptions = {
-			"x-app-key": "",
-			"x-sdk-version": "5.1",
-			"x-request-date": new Date().toLocaleDateString(),
-			"x-task-config": "capkey=ocr.cloud.template",
-			"x-session-key": "",
-			"x-udid": "101:1234567890"
-		}
+OcrPlugin = {
+	defaults: {
+    "x-app-key": "",
+    "x-sdk-version": "5.1",
+    "x-request-date": new Date().toLocaleDateString(),
+    "x-task-config": "lang=chinese_cn,capkey=ocr.cloud.template,property=idcard,templateIndex=0,templatePageIndex=1",
+    "x-session-key": "",
+    "x-udid": "101:1234567890",
+    "x-tid": "12345678",
+	},
 
-		var setting = $.extend(defaultOptions, options)
+	version: "1.0.0",
 
-		return this;
-	}
+	init: function(options) {
+		this.options = this.getOptions(options);
+		console.log(this.options);
+		if (!$.trim(this.options["x-app-key"])) {
+			throw new Error("x-app-key couldn't be empty");
+		} 
+			
+		if (!$.trim(this.options["x-session-key"])) {
+			throw new Error("x-session-key couldn't be empty");
+		} 
+		
+	},
 
-	$.fn.ocrPlugin.request = $.ajax({
-		method: "POST",
-		url: "http://",
-		data:
+	getDefaults: function() {
+		return defaults
+	},
 
-	})
+	getOptions: function(options) {
+		options = $.extend({}, this.getDefaults, options);
 
-	$.fn.ocrPlugin.imageCapture = function(){
+		return options
+	},
 
-	}
 
-	$.fn.ocrPlugin.ocrRecog = function(){
+	recog: function(data){
+		$.ajax({
+			headers: this.options,
+			processData: false,
+			//crossDomain: true,
+			type: "POST",
+			url: "http://localhost:8800/",
+			data: "hello world",
+			success: function(res){
+				console.log(res);
+			}
+		})
+	},
 
-	}
+}
 
-}(jQuery);
+
+
+
+
+
+
+
+
+
+
+
+
